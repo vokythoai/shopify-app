@@ -1,0 +1,38 @@
+- content_for :javascript do
+  :javascript
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Home" });
+    });
+#module-home-page
+  %div.left-column
+    %h2 Promotion
+    %a.btn.btn-primary{href: new_promotion_path} Create Promotion
+  %div.right-column
+    .panel.panel-default
+      .panel-body
+        %table.table-hover.promotion-table
+          %thead
+            %tr
+              %th Name
+              %th Status
+              %th Action
+          %tbody
+            - @promotion.each do |promotion|
+              %tr
+                %td
+                  = promotion.promotion_name
+                %td
+                  = promotion.status.to_s
+                %td
+                  Action
+%hr/
+/ <h2>Webhooks</h2>
+/ <haml_silent> if @webhooks.present? </haml_silent><haml_block>
+/ <ul>
+/ <haml_silent> @webhooks.each do |webhook| </haml_silent><haml_block>
+/ <li><haml_loud> webhook.topic </haml_loud> : <haml_loud> webhook.address </haml_loud></li>
+/ </haml_block>
+/ </ul>
+/ </haml_block><haml_silent> else </haml_silent><haml_block>
+/ <p>This app has not created any webhooks for this Shop. Add webhooks to your ShopifyApp initializer if you need webhooks</p>
+/ </haml_block>

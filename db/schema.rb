@@ -19,14 +19,19 @@ ActiveRecord::Schema.define(version: 20180226115801) do
     t.string "product_name"
     t.string "product_shopify_id"
     t.integer "shop_id"
+    t.integer "promotion_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "promotions", force: :cascade do |t|
-    t.integer "product_id"
+    t.string "promotion_name"
     t.integer "promotion_type"
     t.string "promotion_details"
+    t.string "qty_option"
+    t.string "messages"
+    t.string "customer_option"
+    t.integer "status"
     t.date "valid_date"
     t.date "end_date"
     t.datetime "created_at", null: false

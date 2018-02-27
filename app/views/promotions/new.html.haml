@@ -1,0 +1,92 @@
+#module-new-promotion
+  .panel.panel-default
+    .panel-body
+      = form_for :promotion, url: {action: :create, controller: :promotions}, method: :post do |f|
+        .promotion-type
+          .tab-label
+            %h3 1.Promotion Type
+          .tab-content
+            = f.select("promotion_type", options_for_select(PROMOTION_TYPE), prompt: 'Select promotion type')
+        .hidden-content
+          .promotion-details
+            .tab-label
+              %h3 2.Promotion Details
+            .tab-content
+              .tier-tab.volume-option.hidden
+                %table.table-hover.promotion-table
+                  %thead
+                    %tr
+                      %th Min Qty
+                      %th Discount
+                      %th
+                  %tbody
+                    %tr
+                      %td
+                        = text_field('promotion_details[vd_hash][0][qty]', nil, class: "text_input")
+                      %td
+                        = text_field('promotion_details[vd_hash][0][value]', nil, class: "text_input")
+                      %td
+                        = text_field('promotion_details[vd_hash][0][discount_method]', nil, class: "text_input")
+                  %a.btn.btn-default{href: "#"}  Add another tier
+              .tier-tab.spend-amount-option
+                %table.table-hover.promotion-table
+                  %thead
+                    %tr
+                      %th Min Spend
+                      %th
+                      %th Discount
+                      %th
+                  %tbody
+                    %tr
+                      %td
+                        = text_field(nil, nil, { class: "text_input", value: "{{amount_no_decimals_with_comma_separator}}₫", readonly: true})
+                      %td
+                        = text_field('promotion_details[spend_amount][0][qty]', nil, class: "text_input")
+                      %td
+                        = text_field('promotion_details[spend_amount][0][value]', nil, class: "text_input")
+                      %td
+                        = text_field('promotion_details[spend_amount][0][type]', nil, class: "text_input")
+                  %a.btn.btn-default{href: "#"}  Add another tier
+                %hr
+              .product-tab
+                %h5 Select products that will have these volume discounts applied
+                = f.select("promotion_type", options_for_select(PROMOTION_TYPE), prompt: 'Select products')
+                %h5 Select collections that will have these volume discounts applied
+                = f.select("promotion_type", options_for_select(PROMOTION_TYPE), prompt: 'Select collections')
+                %h5 or apply these volume discounts across the entire store
+                = f.check_box :products
+                %hr
+              .qty-option-tab
+                %h5 Sum up Quantities:
+                = f.radio_button("qty_option", "per_qty")
+                = label 'promotion[per_qty]', 'Per Quantity'
+                = f.radio_button("qty_option", "per_product")
+                = label 'promotion[per_product]', 'Per Product'
+                = f.radio_button("qty_option", "per_item")
+                = label 'promotion[per_item]', 'Across all Selected Items'
+                %hr
+              .message-tab
+                %h5 Upsell Message
+                = text_field('messages[up_sell]', nil, class: "text_input")
+                %h5 Success Message
+                = text_field('messages[success]', nil, class: "text_input")
+                %h5 Internal name (only you will see this)
+                = text_field('messages[internal]', nil, class: "text_input")
+              .promotion-optional
+                .tab-label
+                  %h3 3.Promotion Optional
+                .tab-content
+                  .date-card-section
+                    .start-at
+                      %h5 Promotion start at
+                      = text_field('promotion_details[valid_date]', nil, { class: "text_input", 'data-provide' => 'datepicker'})
+                    .end-at
+                      %h5 Promotion end at
+                      = text_field('promotion_details[end_date]', nil, { class: "text_input", 'data-provide' => 'datepicker'})
+                  %hr
+                  .customer-section
+                    %h5 Only show offer for customers tagged with any of the following
+                    = text_field('promotion_details[customers]', nil, class: "text_input")
+        %hr
+        = f.submit 'Save Promotion', class: 'btn btn-primary'
+

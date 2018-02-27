@@ -1,0 +1,1 @@
+PROMOTION_TYPE = [["Spend Amount", 0], ["Buy X for $", 1]]

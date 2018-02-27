@@ -1,0 +1,20 @@
+#module-home-page {
+  display: inline-block;
+  width: 100%;
+
+  .left-column {
+    width: 50%;
+    float: left;
+    padding: 10px 10px 20px 10px;
+  }
+
+  .right-column {
+    width: 50%;
+    float: right;
+    padding: 10px 10px 20px 10px;
+  }
+
+  .promotion-table {
+    width: 100%;
+  }
+}
