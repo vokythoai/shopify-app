@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   mount ShopifyApp::Engine, at: '/'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :promotions
+
+  post '/discount_cart', to: 'cart#discount_cart', :headers => ":any"
 end

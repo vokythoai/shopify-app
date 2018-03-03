@@ -1,9 +1,9 @@
 class HomeController < ShopifyApp::AuthenticatedController
   def index
     # @products = ShopifyAPI::Product.find(:all, params: { limit: 10 })
-    @promotion = Promotion.all
-    asset = ShopifyAPI::Asset.find('sections/product-template.liquid')
-    asset.value = ParseThemeService.add_discount(asset.value)
-    asset.save
+    shop = ShopifyAPI::Shop.current
+    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first
+    @promotion = current_shop.promotions
+    AddPromotionsService.add_promotion(current_shop)
   end
 end

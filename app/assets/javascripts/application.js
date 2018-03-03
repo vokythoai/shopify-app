@@ -14,6 +14,6 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require turbolinks
-//= require selectize
 //= require bootstrap-datepicker
+//= require selectize
 //= require_tree .

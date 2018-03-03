@@ -1,6 +1,7 @@
 class CreatePromotion < ActiveRecord::Migration[5.1]
   def change
     create_table :promotions do |t|
+      t.string :shop_id
       t.string :promotion_name
       t.integer :promotion_type
       t.string :promotion_details

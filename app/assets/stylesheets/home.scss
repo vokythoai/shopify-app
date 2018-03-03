@@ -1,3 +1,27 @@
+.text_input {
+  position: relative;
+  padding: .5rem 1rem;
+  background-color: #fff;
+  border: .1rem solid #c4cdd5;
+  border-radius: .3rem;
+  color: #31373d;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  font-size: 1.4rem;
+  line-height: 2.4rem;
+  min-width: 7.5rem;
+  vertical-align: baseline;
+  height: auto;
+  margin: 0;
+  max-width: 100%;
+  font-family: -apple-system, "BlinkMacSystemFont", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", sans-serif;
+  box-shadow: 0 0 0 1px transparent, 0 1px 0 0 rgba(22, 29, 37, 0.05);
+  box-sizing: border-box;
+  -webkit-transition: box-shadow 0.2s cubic-bezier(0.64, 0, 0.35, 1);
+  transition: box-shadow 0.2s cubic-bezier(0.64, 0, 0.35, 1);
+}
+
 #module-home-page {
   display: inline-block;
   width: 100%;

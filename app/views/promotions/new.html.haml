@@ -7,6 +7,8 @@
             %h3 1.Promotion Type
           .tab-content
             = f.select("promotion_type", options_for_select(PROMOTION_TYPE), prompt: 'Select promotion type')
+        .clearfix
+        %hr
         .hidden-content
           .promotion-details
             .tab-label
@@ -22,11 +24,11 @@
                   %tbody
                     %tr
                       %td
-                        = text_field('promotion_details[vd_hash][0][qty]', nil, class: "text_input")
+                        = text_field('promotion[promotion_details][volume_amount][0][qty]', nil, class: "text_input")
                       %td
-                        = text_field('promotion_details[vd_hash][0][value]', nil, class: "text_input")
+                        = text_field('promotion[promotion_details][volume_amount][0][value]', nil, class: "text_input")
                       %td
-                        = text_field('promotion_details[vd_hash][0][discount_method]', nil, class: "text_input")
+                        = text_field('promotion[promotion_details][volume_amount][0][discount_method]', nil, class: "text_input")
                   %a.btn.btn-default{href: "#"}  Add another tier
               .tier-tab.spend-amount-option
                 %table.table-hover.promotion-table
@@ -41,18 +43,18 @@
                       %td
                         = text_field(nil, nil, { class: "text_input", value: "{{amount_no_decimals_with_comma_separator}}₫", readonly: true})
                       %td
-                        = text_field('promotion_details[spend_amount][0][qty]', nil, class: "text_input")
+                        = text_field('promotion[promotion_details][spend_amount][0][qty]', nil, class: "text_input")
                       %td
-                        = text_field('promotion_details[spend_amount][0][value]', nil, class: "text_input")
+                        = text_field('promotion[promotion_details][spend_amount][0][value]', nil, class: "text_input")
                       %td
-                        = text_field('promotion_details[spend_amount][0][type]', nil, class: "text_input")
+                        = text_field('promotion[promotion_details][spend_amount][0][type]', nil, class: "text_input")
                   %a.btn.btn-default{href: "#"}  Add another tier
                 %hr
               .product-tab
                 %h5 Select products that will have these volume discounts applied
-                = f.select("promotion_type", options_for_select(PROMOTION_TYPE), prompt: 'Select products')
+                = f.select("product", options_for_select(ShopifyAPI::Product.all.collect{|a| [a.attributes["title"], [a.attributes["id"], a.attributes["title"]]] }), prompt: 'Select products')
                 %h5 Select collections that will have these volume discounts applied
-                = f.select("promotion_type", options_for_select(PROMOTION_TYPE), prompt: 'Select collections')
+                = f.select("colection", options_for_select(ShopifyAPI::Product.all.collect{|a| [a.attributes["title"], a.attributes["id"]] }), prompt: 'Select collections')
                 %h5 or apply these volume discounts across the entire store
                 = f.check_box :products
                 %hr
@@ -72,21 +74,48 @@
                 = text_field('messages[success]', nil, class: "text_input")
                 %h5 Internal name (only you will see this)
                 = text_field('messages[internal]', nil, class: "text_input")
-              .promotion-optional
-                .tab-label
-                  %h3 3.Promotion Optional
-                .tab-content
-                  .date-card-section
-                    .start-at
-                      %h5 Promotion start at
-                      = text_field('promotion_details[valid_date]', nil, { class: "text_input", 'data-provide' => 'datepicker'})
-                    .end-at
-                      %h5 Promotion end at
-                      = text_field('promotion_details[end_date]', nil, { class: "text_input", 'data-provide' => 'datepicker'})
-                  %hr
-                  .customer-section
-                    %h5 Only show offer for customers tagged with any of the following
-                    = text_field('promotion_details[customers]', nil, class: "text_input")
-        %hr
-        = f.submit 'Save Promotion', class: 'btn btn-primary'
+          .clearfix
+          %hr
+          .promotion-optional
+            .tab-label
+              %h3 3.Promotion Optional
+            .tab-content
+              .date-card-section
+                .start-at
+                  %h5 Promotion start at
+                  = text_field('promotion[valid_date]', nil, { class: "text_input"})
+                .end-at
+                  %h5 Promotion end at
+                  = text_field('promotion[end_date]', nil, { class: "text_input"})
+              %hr
+              .customer-section
+                %h5 Only show offer for customers tagged with any of the following
+                = text_field('promotion[customers]', nil, class: "text_input")
+          .clearfix
+          %hr
+        .button-group
+          = f.submit 'Save Promotion', class: 'btn btn-primary'
+:javascript
+  $("#promotion_promotion_type").on('change', function() {
+    if (this.value == "volume_amount"){
+      $(".volume-option").removeClass("hidden")
+      $(".spend-amount-option").addClass("hidden")
+    }
+    else {
+      $(".volume-option").addClass("hidden")
+      $(".spend-amount-option").removeClass("hidden")
+    }
+  })
+
+  $('#promotion_valid_date_').datepicker({
+    format: "dd/mm/yyyy"
+  });
+
+  $('#promotion_end_date_').datepicker({
+    format: "dd/mm/yyyy"
+  });
+
+  $("#promotion_product").selectize()
+  $("#promotion_colection").selectize()
+  $("#promotion_promotion_type").selectize()
 

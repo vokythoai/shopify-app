@@ -1,3 +1,61 @@
 #module-new-promotion {
+  .panel-body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
 
+  form {
+    width: 70%;
+    height: 600px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .promotion-type {
+    display: inline;
+    .tab-label {
+      width: 50%;
+      float: left;
+    }
+    .tab-content {
+      width: 50%;
+      float: right;
+    }
+  }
+
+  .promotion-details {
+    display: inline;
+    .tab-label {
+      width: 50%;
+      float: left;
+    }
+    .tab-content {
+      width: 50%;
+      float: right;
+    }
+  }
+
+  .promotion-optional {
+    display: inline;
+    .tab-label {
+      width: 50%;
+      float: left;
+    }
+    .tab-content {
+      width: 50%;
+      float: right;
+    }
+  }
+
+  .button-group {
+    float: right;
+  }
 }
