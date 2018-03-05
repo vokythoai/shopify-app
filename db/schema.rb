@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180302125308) do
+ActiveRecord::Schema.define(version: 20180305132248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "products", force: :cascade do |t|
-    t.string "product_name"
+    t.string "name"
     t.string "product_shopify_id"
     t.integer "shop_id"
     t.integer "promotion_id"
@@ -27,6 +27,16 @@ ActiveRecord::Schema.define(version: 20180302125308) do
   create_table "products_promotions", force: :cascade do |t|
     t.integer "product_id"
     t.integer "promotion_id"
+  end
+
+  create_table "promotion_details", force: :cascade do |t|
+    t.integer "promotion_id"
+    t.string "content"
+    t.decimal "qty"
+    t.decimal "value"
+    t.string "discount_method"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "promotions", force: :cascade do |t|

@@ -24,7 +24,7 @@
                 %td
                   = promotion.status.to_s
                 %td
-                  Action
+                  = link_to 'Edit', edit_promotion_path(promotion)
 %hr/
 / <h2>Webhooks</h2>
 / <haml_silent> if @webhooks.present? </haml_silent><haml_block>

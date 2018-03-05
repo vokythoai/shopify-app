@@ -2,6 +2,7 @@
   .panel.panel-default
     .panel-body
       = render 'form', promotion: @promotion
+
 :javascript
   $( document ).ready(function() {
      $('#promotion_valid_date').datepicker({
@@ -14,18 +15,12 @@
       startDate: '+1d'
     });
 
-    $('#promotion_products').chosen({
-      no_results_text: 'No results matched',
-      width: '100%'
-    });
-    $('.chosen-select').chosen({
-      no_results_text: 'No results matched',
-      width: '100%'
-    });
     $('#promotion_product').chosen({
       no_results_text: 'No results matched',
-      width: '100%'
+      width: '100%',
+      disable_search: false
     });
+
     $("#promotion_colection").chosen()
     $("#promotion_promotion_type").chosen({
       width: '200px'
@@ -73,4 +68,3 @@
       $(this).closest(".promotion_line").remove();
     });
   });
-
