@@ -17,7 +17,7 @@
               %thead
                 %tr
                   %th Min Qty
-                  %th Discount
+                  %th Discount %
                   %th
               %tbody
                 = f.fields_for :promotion_details do |detail|
@@ -26,8 +26,8 @@
                       = detail.text_field(:qty, class: 'text_input')
                     %td
                       = detail.text_field(:value, class: 'text_input')
-                    %td
-                      = detail.text_field(:discount_method, class: 'text_input')
+                    -#%td
+                    -#  = detail.text_field(:discount_method, class: 'text_input')
                     %td
                       %a.btn.btn-default{class: "remove_tier"}  Remove
           .button-bar
@@ -66,15 +66,15 @@
           -#%h5 or apply these volume discounts across the entire store
           -#= f.check_box :products
           -#%hr
-        .qty-option-tab
-          %h5 Sum up Quantities:
-          = f.radio_button("qty_option", "per_qty")
-          = label 'promotion[per_qty]', 'Per Quantity'
-          = f.radio_button("qty_option", "per_product")
-          = label 'promotion[per_product]', 'Per Product'
-          = f.radio_button("qty_option", "per_item")
-          = label 'promotion[per_item]', 'Across all Selected Items'
-          %hr
+        -#.qty-option-tab
+        -#  %h5 Sum up Quantities:
+        -#  = f.radio_button("qty_option", "per_qty")
+        -#  = label 'promotion[per_qty]', 'Per Quantity'
+        -#  = f.radio_button("qty_option", "per_product")
+        -#  = label 'promotion[per_product]', 'Per Product'
+        -#  = f.radio_button("qty_option", "per_item")
+        -#  = label 'promotion[per_item]', 'Across all Selected Items'
+        -#  %hr
         -#.message-tab
         -#  %h5 Upsell Message
         -#  = text_field('messages[up_sell]', nil, class: "text_input")
@@ -96,9 +96,9 @@
             %h5 Promotion end at
             = f.text_field(:end_date, class: "text_input")
         %hr
-        .customer-section
-          %h5 Only show offer for customers tagged with any of the following
-          = text_field('promotion[customers]', nil, class: "text_input")
+        -#.customer-section
+        -#  %h5 Only show offer for customers tagged with any of the following
+        -#  = text_field('promotion[customers]', nil, class: "text_input")
     .clearfix
     %hr
   .button-group

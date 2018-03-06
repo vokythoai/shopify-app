@@ -11,16 +11,33 @@ class PromotionsController < ShopifyApp::AuthenticatedController
   def create
     shop = ShopifyAPI::Shop.current
     new_promotion = BuildPromotionService.build_promotion(params, shop)
-    # if new_promotion.valid?
-    #   new_promotion.save
-    # end
-    redirect_to root_path
+    if new_promotion.blank?
+      flash[:success] = "Create promotion successfully!"
+      redirect_to root_path
+    else
+      flash[:notice] = new_promotion[:errors].join("\n")
+      redirect_to root_path
+    end
   end
 
   def update
     shop = ShopifyAPI::Shop.current
     promotion_update = BuildPromotionService.update_promotion(params, shop, params[:id])
-    redirect_to root_path
+    if promotion_update.blank?
+      flash[:success] = "Create promotion successfully!"
+      redirect_to root_path
+    else
+      flash[:notice] = promotion_update[:errors].join("\n")
+      redirect_to root_path
+    end
+  end
+
+  def destroy
+    promotion = Promotion.find params[:id]
+    if promotion.destroy
+      flash[:success] = "Delete promotion successfully!"
+      redirect_to root_path
+    end
   end
 
   def edit

@@ -9,4 +9,42 @@ class Promotion < ActiveRecord::Base
   default_scope { order("created_at ASC") }
   enum promotion_type: %w(volume_amount spend_amount)
   enum status: %w(running stopped)
+
+  validate :validate_product, :validate_promotion_details
+
+  def validate_product
+    if products
+      products.each do |product|
+        Promotion.volume_amount.where.not(id: self.id).each do |promotion|
+          if promotion.products.pluck(:product_shopify_id).include?(product.product_shopify_id)
+            errors.add(:errors, "The products #{product.name} is in another promotion")
+          end
+        end
+      end
+    end
+  end
+
+  def validate_promotion_details
+    if self.promotion_details.count.zero?
+      errors.add(:errors, "Please select the promotion details!!")
+    end
+  end
+
+  after_create do
+    shop = ShopifyAPI::Shop.current
+    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first
+    AddPromotionsService.add_promotion(current_shop)
+  end
+
+  after_update do
+    shop = ShopifyAPI::Shop.current
+    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first
+    AddPromotionsService.add_promotion(current_shop)
+  end
+
+  after_destroy do
+    shop = ShopifyAPI::Shop.current
+    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first
+    AddPromotionsService.add_promotion(current_shop)
+  end
 end

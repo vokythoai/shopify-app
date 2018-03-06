@@ -10,7 +10,7 @@
   %div.right-column
     .panel.panel-default
       .panel-body
-        %table.table-hover.promotion-table
+        %table.table.table-striped.promotion-table
           %thead
             %tr
               %th Name
@@ -25,6 +25,7 @@
                   = promotion.status.to_s
                 %td
                   = link_to 'Edit', edit_promotion_path(promotion)
+                  = link_to 'Destroy', promotion_path(promotion), data: {:confirm => 'Are you sure?'}, :method => :delete
 %hr/
 / <h2>Webhooks</h2>
 / <haml_silent> if @webhooks.present? </haml_silent><haml_block>
