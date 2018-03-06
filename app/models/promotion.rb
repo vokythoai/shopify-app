@@ -25,7 +25,7 @@ class Promotion < ActiveRecord::Base
   end
 
   def validate_promotion_details
-    if self.promotion_details.count.zero?
+    unless self.promotion_details.present?
       errors.add(:errors, "Please select the promotion details!!")
     end
   end

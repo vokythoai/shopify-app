@@ -77,6 +77,7 @@ class BuildPromotionService
             )
             @promotion_name << "#{promotion_details.qty.to_i}+ sale #{promotion_details.value}%"
             promotion_details.save
+            promotion.promotion_details << promotion_details
           end
         end
 
