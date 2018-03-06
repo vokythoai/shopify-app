@@ -41,19 +41,24 @@
     currentdate = new Date();
     new_line = '<tr class="promotion_line"> \
                 <td> \
-                <input class="text_input new_input_text" value= "0" type="number" name="promotion[promotion_details_attributes][' + currentdate.getTime() +'][qty]" id="promotion_promotion_details_attributes_' + currentdate.getTime() + '_qty"> \
+                <input class="text_input new_input_text" type="number" name="promotion_promotion_details_attributes_' + currentdate.getTime() +'_qty"> \
                 </td> \
                 <td> \
-                <input class="text_input new_input_text" value= "0" type="number" name="promotion[promotion_details_attributes][' + currentdate.getTime() + '][value]" id="promotion_promotion_details_attributes_' + currentdate.getTime() + '_value"> \
+                <input class="text_input new_input_text" type="number" name="promotion_promotion_details_attributes_' + currentdate.getTime() + '_value">\
                 </td> \
                 <td>\
                 <a class="btn btn-default remove_tier">Remove</a>\
                 </td>\
                 </tr>';
-    $(".promotion-table tbody").append(new_line);
+    submit_field = '<input class="text_input" type="hidden" name="promotion[promotion_details_attributes][' + currentdate.getTime() +'][qty]" id="promotion_promotion_details_attributes_' + currentdate.getTime() + '_qty">\
+                    <input class="text_input" type="hidden" name="promotion[promotion_details_attributes][' + currentdate.getTime() +'][value]" id="promotion_promotion_details_attributes_' + currentdate.getTime() + '_value">'
+    $(".promotion-table").append(new_line);
+    $(".new_promotion").append(submit_field);
     $(".new_input_text").each(function() {
       $(this).on("change", function(){
-        $(this).attr("value", $(this).val())
+        id = "#" + $(this).attr("name");
+        value = $(this).val();
+        $(id).attr("value", value);
       });
     });
 
