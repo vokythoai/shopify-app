@@ -21,15 +21,16 @@
                   %th
               %tbody
                 = f.fields_for :promotion_details do |detail|
-                  %tr{class: "promotion_line"}
-                    %td
-                      = detail.text_field(:qty, class: 'text_input')
-                    %td
-                      = detail.text_field(:value, class: 'text_input')
-                    -#%td
-                    -#  = detail.text_field(:discount_method, class: 'text_input')
-                    %td
-                      %a.btn.btn-default{class: "remove_tier"}  Remove
+                  = render "volume_option_line", detail: detail
+                  -#%tr{class: "promotion_line"}
+                  -#  %td
+                  -#    = detail.text_field(:qty, class: 'text_input')
+                  -#  %td
+                  -#    = detail.text_field(:value, class: 'text_input')
+                  -#  -#%td
+                  -#  -#  = detail.text_field(:discount_method, class: 'text_input')
+                  -#  %td
+                  -#    %a.btn.btn-default{class: "remove_tier"}  Remove
           .button-bar
             %a.btn.btn-default{id: "add_more"}  Add another tier
         .tier-tab.spend-amount-option{class: "#{(@promotion.promotion_type == "spend_amount" ? "" : "hidden")}"}

@@ -42,16 +42,22 @@
     currentdate = new Date();
     new_line = '<tr class="promotion_line"> \
                 <td> \
-                <input class="text_input" type="text" name="promotion[promotion_details_attributes][' + currentdate.getTime() +'][qty]" id="promotion_promotion_details_attributes_' + currentdate.getTime() + '_qty"> \
+                <input class="text_input new_input_text" value= "0" type="number" name="promotion[promotion_details_attributes][' + currentdate.getTime() +'][qty]" id="promotion_promotion_details_attributes_' + currentdate.getTime() + '_qty"> \
                 </td> \
                 <td> \
-                <input class="text_input" type="text" name="promotion[promotion_details_attributes][' + currentdate.getTime() + '][value]" id="promotion_promotion_details_attributes_' + currentdate.getTime() + '_value"> \
+                <input class="text_input new_input_text" value= "0" type="number" name="promotion[promotion_details_attributes][' + currentdate.getTime() + '][value]" id="promotion_promotion_details_attributes_' + currentdate.getTime() + '_value"> \
                 </td> \
                 <td>\
                 <a class="btn btn-default remove_tier">Remove</a>\
                 </td>\
                 </tr>';
     $(".promotion-table tbody").append(new_line);
+    $(".new_input_text").each(function() {
+      $(this).on("change", function(){
+        $(this).attr("value", $(this).val())
+      });
+    });
+
     $(".table-discount").find(".remove_tier").each(function() {
       $(this).on("click", function(){
         $(this).closest(".promotion_line").remove();
