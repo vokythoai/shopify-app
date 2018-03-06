@@ -83,6 +83,7 @@ class ParseThemeService
         html_content.gsub!('<span class="cart__subtotal">{{ cart.total_price | money }}</span>', '<span class="wh-cart-total">{{ total| money }}</span>')
         # html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
         html_content.gsub!("{{ item.line_price | money }}", @promotion_html)
+        html_content.gsub!('<span class="cart__subtotal">{{ cart.total_price | money }}</span>', '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ cart.total_price | money }}</span><span class="wh-cart-total">{{ total| money }}</span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note "></span></div></span>')
       end
 
       unless (html_content =~ /<input id="discount_input" type="hidden" name="discount" value="">/).present?
@@ -92,6 +93,8 @@ class ParseThemeService
           html_content.insert(insert_point_2, '<input id="discount_input" type="hidden" name="discount" value="">')
         end
       end
+
+
 
 
       return html_content
