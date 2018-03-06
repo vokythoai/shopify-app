@@ -82,7 +82,6 @@ class ParseThemeService
       total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ cart.total_price | money }}</span><span class="wh-cart-total">{{ total| money }}</span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note "></span></div></span>'
       if @promotion_html
         html_content.prepend("{% assign total = 0 %}")
-        html_content.gsub!('<span class="cart__subtotal">{{ cart.total_price | money }}</span>', '<span class="wh-cart-total">{{ total| money }}</span>')
         # html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
         html_content.gsub!("{{ item.line_price | money }}", @promotion_html)
         html_content.gsub!('<span class="cart__subtotal">{{ cart.total_price | money }}</span>', total_qty)
