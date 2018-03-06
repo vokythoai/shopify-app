@@ -78,13 +78,13 @@ class ParseThemeService
                   {% endif %}"
 
       @promotion_html =  @assign_product_ids.join("\n") + @promotion_html + else_qty
-      unless (html_content =~ /<span class='booster-cart-item-line-price'/).nil?
-        if @promotion_html
-          html_content.prepend("{% assign total = 0 %}")
-          html_content.gsub!('<span class="wh-cart-total"></span>', '<span class="wh-cart-total">{{ total| money }}</span>')
-          html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
-        end
+      if @promotion_html
+        html_content.prepend("{% assign total = 0 %}")
+        html_content.gsub!('<span class="cart__subtotal">{{ cart.total_price | money }}</span>', '<span class="wh-cart-total">{{ total| money }}</span>')
+        # html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
+        html_content.gsub!("{{ item.line_price | money }}", @promotion_html)
       end
+
       unless (html_content =~ /<input id="discount_input" type="hidden" name="discount" value="">/).present?
         insert_point_2 = html_content =~ /<form action="\/cart" method="post" novalidate class="cart">/
         if insert_point_2
