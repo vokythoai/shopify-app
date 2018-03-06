@@ -42,17 +42,6 @@ class CartController < ApplicationController
       )
       @new_discount_code.save
 
-      # cart_items = params[:items_detail]
-      # qty = params[:qty]
-      # line_items = []
-      # cart_items.each_with_index do |item, index |
-      #   line_items << { "variant_id": item.to_i, "quantity": qty[index].to_i}
-      # end
-      # new_checkout = ShopifyAPI::Checkout.new(
-      #   "line_items": line_items
-      # )
-      # binding.pry
-      # new_checkout.save
     end
     render json: { result: "OK", discount_code: title}, status: 200
   end
