@@ -96,11 +96,10 @@ class ParseThemeService
         qty.each_with_index do |detail, index_|
           @spend_amount_html += ((index.zero? && index_.zero?) ? "{% if total >= #{detail[0].to_i*100} %}" : "{% elsif total >= #{detail[0].to_i*100} %}")
           @spend_amount_html += "<span class='wh-cart-total'>{{ 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>"
-          @spend_amount_html += "{% assign total_after_discount = 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100  %}"
         end
 
         alert_spend_qty.each_with_index do |detail, index_|
-          @alert_spend_amount_html += ((index.zero? && index_.zero?) ? "{% if total_after_discount < #{detail[0].to_i*100} %}" : "{% elsif total_after_discount < #{detail[0].to_i*100} %}")
+          @alert_spend_amount_html += ((index.zero? && index_.zero?) ? "{% if total < #{detail[0].to_i*100} %}" : "{% elsif total < #{detail[0].to_i*100} %}")
           @alert_spend_amount_html += '<script type="text/javascript">' +
                                       'script = document.createElement("script");
                                         script.type = "text/javascript";
