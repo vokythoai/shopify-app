@@ -15,7 +15,7 @@ class Promotion < ActiveRecord::Base
   def validate_product
     if products
       products.each do |product|
-        Promotion.volume_amount.where.not(id: self.id).each do |promotion|
+        Promotion.send(promotion_type).where.not(id: self.id).each do |promotion|
           if promotion.products.pluck(:product_shopify_id).include?(product.product_shopify_id)
             errors.add(:errors, "The products #{product.name} is in another promotion")
           end

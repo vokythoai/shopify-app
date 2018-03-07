@@ -3,7 +3,7 @@
     .tab-label
       %h3 1.Promotion Type
     .tab-content
-      = f.select("promotion_type", options_for_select(PROMOTION_TYPE), prompt: 'Select promotion type')
+      = f.select(:promotion_type, options_for_select(PROMOTION_TYPE, selected: @promotion.promotion_type), prompt: 'Select promotion type')
   .clearfix
   %hr
   .hidden-content
@@ -11,48 +11,39 @@
       .tab-label
         %h3 2.Promotion Details
       .tab-content
-        .tier-tab.volume-option{class: "#{(@promotion.promotion_type == "volume_amount" ? "" : "hidden")}"}
-          .table-discount
-            %table.table-hover.promotion-table
+        - if (@promotion.persisted? && @promotion.volume_amount?) || @promotion.new_record?
+          .tier-tab.volume-option{class: "#{(@promotion.promotion_type == "volume_amount" ? "" : "hidden")}", disable: "#{(@promotion.promotion_type == "spend_amount" ? true : false)}"}
+            .table-discount
+              %table.table-hover.promotion-volume-table
+                %thead
+                  %tr
+                    %th Min Qty
+                    %th Discount %
+                    %th
+                %tbody
+                  = f.fields_for :promotion_details do |detail|
+                    = render "volume_option_line", detail: detail
+            .button-bar
+              %a.btn.btn-default{id: "add_more_volume"}  Add another tier
+        - if (@promotion.persisted? && @promotion.spend_amount?) || @promotion.new_record?
+          .tier-tab.spend-amount-option{class: "#{(@promotion.promotion_type == "spend_amount" ? "" : "hidden")}", disabled: "disabled"}
+            %table.table-hover.promotion-spend-table
               %thead
                 %tr
-                  %th Min Qty
-                  %th Discount %
+                  %th Min Spend
+                  %th Discount
+                  %th
                   %th
               %tbody
+                %tr
+                  %td
+                    = text_field_tag nil, 'Minimum Amount Spend', class: "text_input", readonly: true
+                  %td
+                    = text_field_tag nil, '% Discount', class: "text_input", readonly: true
                 = f.fields_for :promotion_details do |detail|
-                  = render "volume_option_line", detail: detail
-                  -#%tr{class: "promotion_line"}
-                  -#  %td
-                  -#    = detail.text_field(:qty, class: 'text_input')
-                  -#  %td
-                  -#    = detail.text_field(:value, class: 'text_input')
-                  -#  -#%td
-                  -#  -#  = detail.text_field(:discount_method, class: 'text_input')
-                  -#  %td
-                  -#    %a.btn.btn-default{class: "remove_tier"}  Remove
-          .button-bar
-            %a.btn.btn-default{id: "add_more"}  Add another tier
-        .tier-tab.spend-amount-option{class: "#{(@promotion.promotion_type == "spend_amount" ? "" : "hidden")}"}
-          %table.table-hover.promotion-table
-            %thead
-              %tr
-                %th Min Spend
-                %th
-                %th Discount
-                %th
-            %tbody
-              %tr{class: "promotion_line"}
-                %td
-                  = text_field(nil, nil, { class: "text_input", value: "{{amount_no_decimals_with_comma_separator}}₫", readonly: true})
-                %td
-                  = text_field('promotion[promotion_details][spend_amount][0][qty]', nil, class: "text_input")
-                %td
-                  = text_field('promotion[promotion_details][spend_amount][0][value]', nil, class: "text_input")
-                %td
-                  = text_field('promotion[promotion_details][spend_amount][0][type]', nil, class: "text_input")
-                %td
-                  %a.btn.btn-default{href: "#", id: "add_more"}  Add another tier
+                  = render "spend_amount_option_line", detail: detail
+            .button-bar
+              %a.btn.btn-default{id: "add_more_spend_amount"}  Add another tier
           %hr
         .product-tab
           %h5 Select products that will have these volume discounts applied

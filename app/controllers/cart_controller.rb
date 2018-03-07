@@ -12,7 +12,7 @@ class CartController < ApplicationController
     ShopifyAPI::Base.activate_session(session)
     original_cost = params["original_price"].gsub(".","").to_f
     discount_cost = params["discount_price"].gsub(".","").to_f
-    product_array = params["product_array"].map{|id| id.to_i }
+    product_array = params["product_array"].map{|id| id.to_i }.reject!{|id| id.zero?}
     title = "MISKRE_" + [*('a'..'z'),*('0'..'9')].shuffle[0,10].join
     if discount_cost && original_cost > discount_cost
       @new_price_rule = ShopifyAPI::PriceRule.new(
