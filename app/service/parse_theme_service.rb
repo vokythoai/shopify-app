@@ -66,7 +66,7 @@ class ParseThemeService
                        {{ item.line_price | money }}
                       </span>
                       <span class='discounted_price'>
-                       {{ 100 | minus: #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money }}
+                        Discount #{detail[0].to_i}% = {{ 100 | minus: #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money }}
                        {% assign total = 100 | minus: #{detail[1].to_i} | times: item.line_price | divided_by: 100 | plus: total  %}
                       </span>
                       </span>"
