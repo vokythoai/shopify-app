@@ -10,7 +10,7 @@ class CartController < ApplicationController
     shop = Shop.where(shopify_domain: shop_domain).first
     session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
     ShopifyAPI::Base.activate_session(session)
-    original_cost = params["original_price"].gsub(".","").to_f
+    original_cost = params["original_price"].gsub(".","").to_f/100
     discount_cost = params["discount_price"].gsub(".","").to_f
     product_array = params["product_array"].map{|id| id.to_i }.reject{|num| num.zero?}
     title = "MISKRE_" + [*('a'..'z'),*('0'..'9')].shuffle[0,10].join
