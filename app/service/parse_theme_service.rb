@@ -64,6 +64,7 @@ class ParseThemeService
           @content += "<span class='booster-cart-item-line-price' data-key='{{item.key}}' data-product='{{ item.product.id}}' data-item='{{ item.id}}' data-qty='{{item.quantity}}'>
                       <span class='original_price'>
                        {{ item.line_price | money }}
+                       {% assign original_total = item.line_price | plus: original_total  %}
                       </span>
                       <span class='discounted_price'>
                         Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money }}
@@ -86,6 +87,7 @@ class ParseThemeService
       else_qty = "{% elsif true %}
                   <span class='booster-cart-item-line-price' data-key='{{item.key}}' data-product='{{ item.product.id}}' data-item='{{ item.id}}' data-qty='{{item.quantity}}'>{{ item.line_price | money }}</span>
                   {% assign total = item.line_price | plus: total  %}
+                  {% assign original_total = item.line_price | plus: original_total  %}
                   {% endif %}"
 
       @alert_discount_html = @alert_discount_html.present? ? (@assign_product_ids.join("\n") + @alert_discount_html + "{% endif %}") : ""
@@ -99,7 +101,7 @@ class ParseThemeService
         qty.each_with_index do |detail, index_|
           @spend_amount_html += ((index.zero? && index_.zero?) ? "{% if total >= #{detail[0].to_i*100} %}" : "{% elsif total >= #{detail[0].to_i*100} %}")
           @spend_amount_html += "<span class='discount-spend-amount'>Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>
-                                <span class='wh-cart-total'>{{ 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>"
+                                <span class='wh-cart-total' data-original= {{ original_total }}>{{ 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>"
         end
 
         alert_spend_qty.each_with_index do |detail, index_|
@@ -128,6 +130,7 @@ class ParseThemeService
 
       if @promotion_html
         html_content.prepend("{% assign total = 0 %}")
+        html_content.prepend("{% assign original_total = 0 %}")
         # html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
         html_content.gsub!("{{ item.line_price | money }}", @promotion_html)
         html_content.gsub!('<span class="cart__subtotal">{{ cart.total_price | money }}</span>', total_qty)
