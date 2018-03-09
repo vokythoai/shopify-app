@@ -124,7 +124,7 @@ class ParseThemeService
       else_spend_amount = "{% elsif true %}
                           <span class='wh-cart-total'>{{ total | money }}</span>
                           {% endif %}"
-      total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ cart.total_price | money }}</span>' + (@spend_amount_html + else_spend_amount) + '</span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note "></span></div></span>' + @alert_spend_amount_html
+      total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ total | money }}</span>' + (@spend_amount_html + else_spend_amount) + '</span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note "></span></div></span>' + @alert_spend_amount_html
 
       if @promotion_html
         html_content.prepend("{% assign total = 0 %}")
