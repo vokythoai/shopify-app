@@ -112,7 +112,7 @@ class ParseThemeService
                                         script.src = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js";
                                         document.head.appendChild(script);
                                         script.onload = function() {' +
-                                        'var html = "' + "<div id='miskre-notification-bar' style='display: block;'>Spend #{ActionController::Base.helpers.number_with_delimiter(detail[0].to_i)} to get #{detail[1].to_i}% off<div id='miskre-close-notification'>X</div></div>" + '";' +
+                                        'var html = "' + "<div id='miskre-notification-bar' style='display: block;'>Spend " + "{{ total | money }}" + " to get #{detail[1].to_i}% off<div id='miskre-close-notification'>X</div></div>" + '";' +
                                         '$("main").prepend(html);' +
                                         '};' +
                                       '</script>'
