@@ -69,6 +69,9 @@ class ParseThemeService
                         Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money }}
                        {% assign total = 100 | minus: #{detail[1].to_i} | times: item.line_price | divided_by: 100 | plus: total  %}
                       </span>
+                      <span class='after-discount-price'>
+                       {{ 100 | minus: #{detail[1].to_i} | times: item.line_price | divided_by: 100 | plus: total }}
+                      </span>
                       </span>"
         end
 
