@@ -70,7 +70,7 @@ class ParseThemeService
                        {% assign total = 100 | minus: #{detail[1].to_i} | times: item.line_price | divided_by: 100 | plus: total  %}
                       </span>
                       <span class='after-discount-price'>
-                       {{ #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money}}
+                       {{ 100 | minus: #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money}}
                       </span>
                       </span>"
         end
