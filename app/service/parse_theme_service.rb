@@ -101,7 +101,7 @@ class ParseThemeService
         qty.each_with_index do |detail, index_|
           @spend_amount_html += ((index.zero? && index_.zero?) ? "{% if total >= #{detail[0].to_i*100} %}" : "{% elsif total >= #{detail[0].to_i*100} %}")
           @spend_amount_html += "<span class='discount-spend-amount'>Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>
-                                <span class='wh-cart-total' data-original= {{ original_total }}>{{ 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>"
+                                <span class='wh-cart-total' data-original={{ original_total }}>{{ 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>"
         end
 
         alert_spend_qty.each_with_index do |detail, index_|
@@ -121,10 +121,10 @@ class ParseThemeService
 
       @alert_spend_amount_html = @alert_spend_amount_html.present? ? (@alert_spend_amount_html + "{% endif %}") : ""
 
-      @spend_amount_html = @spend_amount_html.present? ? @spend_amount_html : '<span class="wh-cart-total">{{ total| money }}'
+      @spend_amount_html = @spend_amount_html.present? ? @spend_amount_html : '<span class="wh-cart-total" data-original={{ original_total }}>{{ total| money }}</span>'
 
       else_spend_amount = "{% elsif true %}
-                          <span class='wh-cart-total'>{{ total | money }}</span>
+                          <span class='wh-cart-total' data-original={{ original_total }}>{{ total | money }}</span>
                           {% endif %}"
       total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ total | money }}</span>' + (@spend_amount_html + else_spend_amount) + '</span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note "></span></div></span>' + @alert_spend_amount_html
 
