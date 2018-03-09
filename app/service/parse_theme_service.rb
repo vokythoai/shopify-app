@@ -98,8 +98,8 @@ class ParseThemeService
         alert_spend_qty = promotion.promotion_details.map{|a| [a.qty.to_i, a.value.to_i] }.sort {|x,y| x <=> y }
         qty.each_with_index do |detail, index_|
           @spend_amount_html += ((index.zero? && index_.zero?) ? "{% if total >= #{detail[0].to_i*100} %}" : "{% elsif total >= #{detail[0].to_i*100} %}")
-          @spend_amount_html += "<span class='wh-cart-total'>{{ 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>
-                                <span class ='discount-spend-amount'> Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: total | divided_by: 100 | money }} </span>"
+          @spend_amount_html += "<span class='discount-spend-amount'>Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>
+                                <span class='wh-cart-total'>{{ 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>"
         end
 
         alert_spend_qty.each_with_index do |detail, index_|
