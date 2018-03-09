@@ -14,7 +14,8 @@ class CartController < ApplicationController
     discount_cost = params["discount_price"].gsub(".","").to_f
     product_array = params["product_array"].map{|id| id.to_i }.reject{|num| num.zero?}
     title = "MISKRE_" + [*('a'..'z'),*('0'..'9')].shuffle[0,10].join
-    if discount_cost && original_cost > discount_cost
+    discount_result =  false
+    if discount_cost > 0 && original_cost > discount_cost
       @new_price_rule = ShopifyAPI::PriceRule.new(
           title: title,
           target_type: "line_item",
@@ -40,10 +41,10 @@ class CartController < ApplicationController
           'value_type': 'fixed_amount',
           'value': (0 - (original_cost - discount_cost)).to_s
       )
-      @new_discount_code.save
+      @new_discount_code.save ? (discount_result = title) : false
 
     end
-    render json: { result: "OK", discount_code: title}, status: 200
+    render json: { result: "OK", discount_code: discount_result}, status: 200
   end
 
 
