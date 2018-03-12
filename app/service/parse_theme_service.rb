@@ -81,7 +81,7 @@ class ParseThemeService
           @alert_discount_html += ((index.zero? && index_.zero?) ? "{% if myProductId_#{promotion.id} contains item.product_id and item.quantity < #{detail[0].to_i} %}" : "{% elsif myProductId_#{promotion.id} contains item.product_id and item.quantity < #{detail[0].to_i} %}")
           @alert_discount_html += "<span class='miskre-discount-note' data-id= {{item.id}}>Buy #{alert_discount[index_][0].to_i} to get #{alert_discount[index_][1].to_i}% off</span>"
         end
-        @promotion_html +=  (@content.blank? ? "" : (compare_price + @content))
+        @promotion_html +=  (@content.blank? ? "" :  @content)
       end
 
       compare_price = "<span class='compare_price'>
