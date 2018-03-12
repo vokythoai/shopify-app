@@ -59,8 +59,8 @@ class ParseThemeService
         alert_discount = promotion.promotion_details.map{|a| [a.qty.to_i, a.value.to_i] }.sort {|x,y| x <=> y }
         @assign_product_ids << "{% assign myProductId_#{promotion.id} = '#{product_liquid_array}'  %}"
         @content = ""
-        qty.each_with_index do |detail, index_|
-          @content += "<span class='compare_price'>
+
+        compare_price = "<span class='compare_price'>
                        {% if item.product.compare_at_price > 0 %}
                          {{ item.product.compare_at_price | times: item.quantity | money }}
                           {% assign compare_price_total = item.product.compare_at_price | times: item.quantity | plus: compare_price_total  %}
@@ -68,6 +68,7 @@ class ParseThemeService
                            {% assign compare_price_total = item.line_price | plus: compare_price_total  %}
                        {% endif %}
                       </span>"
+        qty.each_with_index do |detail, index_|
           @content += ((index.zero? && index_.zero?) ? "{% if myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}" : "{% elsif myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}")
           @content += "<span class='booster-cart-item-line-price' data-key='{{item.key}}' data-product='{{ item.product.id}}' data-item='{{ item.id}}' data-qty='{{item.quantity}}'>
                       <span class='original_price'>
@@ -89,7 +90,7 @@ class ParseThemeService
           @alert_discount_html += ((index.zero? && index_.zero?) ? "{% if myProductId_#{promotion.id} contains item.product_id and item.quantity < #{detail[0].to_i} %}" : "{% elsif myProductId_#{promotion.id} contains item.product_id and item.quantity < #{detail[0].to_i} %}")
           @alert_discount_html += "<span class='miskre-discount-note' data-id= {{item.id}}>Buy #{alert_discount[index_][0].to_i} to get #{alert_discount[index_][1].to_i}% off</span>"
         end
-        @promotion_html +=  (@content.blank? ? "" : @content)
+        @promotion_html +=  (@content.blank? ? "" : (compare_price + @content))
       end
 
 
