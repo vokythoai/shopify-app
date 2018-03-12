@@ -63,12 +63,18 @@ class ParseThemeService
           @content += ((index.zero? && index_.zero?) ? "{% if myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}" : "{% elsif myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}")
           @content += "<span class='booster-cart-item-line-price' data-key='{{item.key}}' data-product='{{ item.product.id}}' data-item='{{ item.id}}' data-qty='{{item.quantity}}'>
                       <span class='original_price'>
-                       {{ item.line_price | money }}
-                       {% assign original_total = item.line_price | plus: original_total  %}
+                       {% if item.product.compare_at_price > 0 %}
+                         {{ item.product.compare_at_price | times: item.quantity | money }}
+                         {% assign original_total = item.product.compare_at_price | times: item.quantity | plus: original_total  %}
+                        {% else %}
+                         {{ item.line_price | money }}
+                         {% assign original_total = item.line_price | plus: original_total  %}
+                        {% endif %}
                       </span>
                       <span class='discounted_price'>
                         Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money }}
                        {% assign total = 100 | minus: #{detail[1].to_i} | times: item.line_price | divided_by: 100 | plus: total  %}
+                       {% assign total_discount = #{detail[1].to_i} | times: item.line_price | divided_by: 100 | plus: total_discount  %}
                       </span>
                       <span class='after-discount-price'>
                        {{ 100 | minus: #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money}}
@@ -100,7 +106,8 @@ class ParseThemeService
         alert_spend_qty = promotion.promotion_details.map{|a| [a.qty.to_i, a.value.to_i] }.sort {|x,y| x <=> y }
         qty.each_with_index do |detail, index_|
           @spend_amount_html += ((index.zero? && index_.zero?) ? "{% if total >= #{detail[0].to_i*100} %}" : "{% elsif total >= #{detail[0].to_i*100} %}")
-          @spend_amount_html += "<span class='discount-spend-amount'>Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>
+          @spend_amount_html += "{% assign total_discount = #{detail[1].to_i} | times: total | divided_by: 100 | plus: total_discount  %}
+                                <span class='discount-spend-amount'>Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>
                                 <span class='wh-cart-total' data-original={{ original_total }}>{{ 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>"
         end
 
@@ -126,11 +133,12 @@ class ParseThemeService
       else_spend_amount = "{% elsif true %}
                           <span class='wh-cart-total no-discount' data-original={{ original_total }}>{{ total | money }}</span>
                           {% endif %}"
-      total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ total | money }}</span>' + (@spend_amount_html + else_spend_amount) + '</span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note "></span></div></span>' + @alert_spend_amount_html
+      total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ total | money }}</span>' + (@spend_amount_html + else_spend_amount) + '</span><div class="additional-notes">YOU SAVE {{ total_discount | money}}</div></span>' + @alert_spend_amount_html
 
       if @promotion_html
         html_content.prepend("{% assign total = 0 %}")
         html_content.prepend("{% assign original_total = 0 %}")
+        html_content.prepend("{% assign total_discount = 0 %}")
         # html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
         html_content.gsub!("{{ item.line_price | money }}", @promotion_html)
         html_content.gsub!('<span class="cart__subtotal">{{ cart.total_price | money }}</span>', total_qty)
