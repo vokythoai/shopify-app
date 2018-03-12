@@ -65,11 +65,10 @@ class ParseThemeService
                       <span class='original_price'>
                        {% if item.product.compare_at_price > 0 %}
                          {{ item.product.compare_at_price | times: item.quantity | money }}
-                         {% assign original_total = item.product.compare_at_price | times: item.quantity | plus: original_total  %}
                         {% else %}
                          {{ item.line_price | money }}
-                         {% assign original_total = item.line_price | plus: original_total  %}
                         {% endif %}
+                        {% assign original_total = item.line_price | plus: original_total  %}
                       </span>
                       <span class='discounted_price'>
                         Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money }}
