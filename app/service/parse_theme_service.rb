@@ -63,15 +63,16 @@ class ParseThemeService
           @content += "<span class='compare_price'>
                        {% if item.product.compare_at_price > 0 %}
                          {{ item.product.compare_at_price | times: item.quantity | money }}
-                          {% assign original_total = item.product.compare_at_price | times: item.quantity | plus: original_total  %}
+                          {% assign compare_price_total = item.product.compare_at_price | times: item.quantity | plus: compare_price_total  %}
                         {% else %}
-                           {% assign original_total = item.line_price | plus: original_total  %}
+                           {% assign compare_price_total = item.line_price | plus: compare_price_total  %}
                        {% endif %}
                       </span>"
           @content += ((index.zero? && index_.zero?) ? "{% if myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}" : "{% elsif myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}")
           @content += "<span class='booster-cart-item-line-price' data-key='{{item.key}}' data-product='{{ item.product.id}}' data-item='{{ item.id}}' data-qty='{{item.quantity}}'>
                       <span class='original_price'>
                          {{ item.line_price | money }}
+                         {% assign original_total = item.line_price | plus: original_total  %}
                       </span>
                       <span class='discounted_price'>
                         Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money }}
@@ -135,12 +136,13 @@ class ParseThemeService
       else_spend_amount = "{% elsif true %}
                           <span class='wh-cart-total no-discount' data-original={{ original_total }}>{{ total | money }}</span>
                           {% endif %}"
-      total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ total | money }}</span>' + (@spend_amount_html + else_spend_amount) + '</span><div class="additional-notes">YOU SAVE {{ original_total | minus: total | money}}</div></span>' + @alert_spend_amount_html
+      total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ total | money }}</span>' + (@spend_amount_html + else_spend_amount) + '</span><div class="additional-notes">YOU SAVE {{ compare_price_total | minus: total | money}}</div></span>' + @alert_spend_amount_html
 
       if @promotion_html
         html_content.prepend("{% assign total = 0 %}")
         html_content.prepend("{% assign original_total = 0 %}")
         html_content.prepend("{% assign total_discount = 0 %}")
+        html_content.prepend("{% assign compare_price_total = 0 %}")
         # html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
         html_content.gsub!("{{ item.line_price | money }}", @promotion_html)
         html_content.gsub!('<span class="cart__subtotal">{{ cart.total_price | money }}</span>', total_qty)
