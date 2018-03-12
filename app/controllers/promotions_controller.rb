@@ -43,5 +43,6 @@ class PromotionsController < ShopifyApp::AuthenticatedController
   def edit
     @promotion = Promotion.find params[:id]
     @promotion.product = @promotion.products.collect{|p| p.product_shopify_id.to_i}
+    @promotion.all_product = (@promotion.products.size == ShopifyAPI::Product.all.count) ? "1" : "0"
   end
 end

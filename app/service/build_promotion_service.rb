@@ -1,5 +1,5 @@
 class BuildPromotionService
-
+  extend ActionView::Helpers::NumberHelper
   class << self
     def build_promotion params, shop
       result = ""
@@ -15,7 +15,8 @@ class BuildPromotionService
         )
         session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
         ShopifyAPI::Base.activate_session(session)
-        if promotion_param["product"].present?
+        currency = ShopifyAPI::Shop.current.attributes["currency"]
+        if promotion_param["product"].present? && promotion_param["all_product"] == "0"
           product_param = promotion_param["product"]
           product_param.each do |product|
             if product.present?
@@ -25,6 +26,13 @@ class BuildPromotionService
               product.save
               new_promotion.products << product
             end
+          end
+        elsif promotion_param["all_product"] == "1"
+          ShopifyAPI::Product.all.each do |product|
+            product = Product.find_or_initialize_by(product_shopify_id: product.attributes["id"], name: product.attributes["title"])
+            product.shop_id = shop_id
+            product.save
+            new_promotion.products << product
           end
         end
         @promotion_name = []
@@ -36,7 +44,7 @@ class BuildPromotionService
                 value: attributes[:value].to_f,
                 discount_method: attributes[:discount_method].to_f
             )
-            @promotion_name << "#{promotion_details.qty.to_i}+ sale #{promotion_details.value}%"
+            @promotion_name << (new_promotion.volume_amount? ? "#{promotion_details.qty.to_i}+ sale #{promotion_details.value}%" : "#{number_with_delimiter(promotion_details.qty.to_i, delimiter: ".", separator: ",")}#{currency} sale #{promotion_details.value}%")
             promotion_details.save
             new_promotion.promotion_details << promotion_details
           end
@@ -54,6 +62,7 @@ class BuildPromotionService
 
     def update_promotion params, shop, promotion_id
       result = ""
+      currency = ShopifyAPI::Shop.current.attributes["currency"]
       ActiveRecord::Base.transaction do
         promotion = Promotion.find promotion_id
         promotion_param = params["promotion"]
@@ -75,7 +84,7 @@ class BuildPromotionService
                 discount_method: attributes[:discount_method].to_f,
                 promotion_id: promotion_id
             )
-            @promotion_name << "#{promotion_details.qty.to_i}+ sale #{promotion_details.value}%"
+            @promotion_name << (promotion.volume_amount? ? "#{promotion_details.qty.to_i}+ sale #{promotion_details.value}%" : "#{ number_with_delimiter(promotion_details.qty.to_i, delimiter: ".", separator: ",")}#{currency} sale #{promotion_details.value}%")
             promotion_details.save
             promotion.promotion_details << promotion_details
           end
@@ -83,6 +92,7 @@ class BuildPromotionService
 
         session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
         ShopifyAPI::Base.activate_session(session)
+
         if promotion_param["product"].present?
           product_ids = []
           product_param = promotion_param["product"]

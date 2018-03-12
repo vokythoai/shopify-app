@@ -1,4 +1,5 @@
 class ParseThemeService
+
   class << self
     def add_section html_content, promotions, shop
       discount_html = ""
