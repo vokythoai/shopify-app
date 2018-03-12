@@ -59,15 +59,6 @@ class ParseThemeService
         alert_discount = promotion.promotion_details.map{|a| [a.qty.to_i, a.value.to_i] }.sort {|x,y| x <=> y }
         @assign_product_ids << "{% assign myProductId_#{promotion.id} = '#{product_liquid_array}'  %}"
         @content = ""
-
-        compare_price = "<span class='compare_price'>
-                       {% if item.product.compare_at_price > 0 %}
-                         {{ item.product.compare_at_price | times: item.quantity | money }}
-                          {% assign compare_price_total = item.product.compare_at_price | times: item.quantity | plus: compare_price_total  %}
-                        {% else %}
-                           {% assign compare_price_total = item.line_price | plus: compare_price_total  %}
-                       {% endif %}
-                      </span>"
         qty.each_with_index do |detail, index_|
           @content += ((index.zero? && index_.zero?) ? "{% if myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}" : "{% elsif myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}")
           @content += "<span class='booster-cart-item-line-price' data-key='{{item.key}}' data-product='{{ item.product.id}}' data-item='{{ item.id}}' data-qty='{{item.quantity}}'>
@@ -93,6 +84,14 @@ class ParseThemeService
         @promotion_html +=  (@content.blank? ? "" : (compare_price + @content))
       end
 
+      compare_price = "<span class='compare_price'>
+                       {% if item.product.compare_at_price > 0 %}
+                         {{ item.product.compare_at_price | times: item.quantity | money }}
+                          {% assign compare_price_total = item.product.compare_at_price | times: item.quantity | plus: compare_price_total  %}
+                        {% else %}
+                           {% assign compare_price_total = item.line_price | plus: compare_price_total  %}
+                       {% endif %}
+                      </span>"
 
       else_qty = "{% elsif true %}
                   <span class='booster-cart-item-line-price' data-key='{{item.key}}' data-product='{{ item.product.id}}' data-item='{{ item.id}}' data-qty='{{item.quantity}}'>{{ item.line_price | money }}</span>
@@ -101,7 +100,7 @@ class ParseThemeService
                   {% endif %}"
 
       @alert_discount_html = @alert_discount_html.present? ? (@assign_product_ids.join("\n") + @alert_discount_html + "{% endif %}") : ""
-      @promotion_html =  @assign_product_ids.join("\n") + @promotion_html + else_qty
+      @promotion_html =  @assign_product_ids.join("\n") + compare_price + @promotion_html + else_qty
 
       @spend_amount_html = ""
       @alert_spend_amount_html = ""
