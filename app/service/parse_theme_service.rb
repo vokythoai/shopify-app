@@ -62,13 +62,16 @@ class ParseThemeService
         qty.each_with_index do |detail, index_|
           @content += ((index.zero? && index_.zero?) ? "{% if myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}" : "{% elsif myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}")
           @content += "<span class='booster-cart-item-line-price' data-key='{{item.key}}' data-product='{{ item.product.id}}' data-item='{{ item.id}}' data-qty='{{item.quantity}}'>
-                      <span class='original_price'>
+                      <span class='compare_price'>
                        {% if item.product.compare_at_price > 0 %}
                          {{ item.product.compare_at_price | times: item.quantity | money }}
+                          {% assign original_total = item.line_price | plus: original_total  %}
                         {% else %}
+                           {% assign original_total = item.line_price | plus: original_total  %}
+                       {% endif %}
+                      </span>
+                      <span class='original_price'>
                          {{ item.line_price | money }}
-                        {% endif %}
-                        {% assign original_total = item.line_price | plus: original_total  %}
                       </span>
                       <span class='discounted_price'>
                         Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: item.line_price | divided_by: 100 | money }}
