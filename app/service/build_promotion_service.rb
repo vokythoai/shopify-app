@@ -5,7 +5,7 @@ class BuildPromotionService
       result = ""
       ActiveRecord::Base.transaction do
         promotion_param = params["promotion"]
-        shop = Shop.where(shopify_domain: shop.attributes["domain"]).first
+        shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
         shop_id = shop.id
         new_promotion = Promotion.new(
           promotion_type: Promotion::promotion_types[promotion_param["promotion_type"]],
@@ -66,7 +66,7 @@ class BuildPromotionService
       ActiveRecord::Base.transaction do
         promotion = Promotion.find promotion_id
         promotion_param = params["promotion"]
-        shop = Shop.where(shopify_domain: shop.attributes["domain"]).first
+        shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
         shop_id = shop.id
         promotion.assign_attributes(
             promotion_type: Promotion::promotion_types[promotion_param["promotion_type"]],

@@ -32,19 +32,19 @@ class Promotion < ActiveRecord::Base
 
   after_create do
     shop = ShopifyAPI::Shop.current
-    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first
+    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
     AddPromotionsService.add_promotion(current_shop)
   end
 
   after_update do
     shop = ShopifyAPI::Shop.current
-    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first
+    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
     AddPromotionsService.add_promotion(current_shop)
   end
 
   after_destroy do
     shop = ShopifyAPI::Shop.current
-    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first
+    current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
     AddPromotionsService.add_promotion(current_shop)
   end
 end

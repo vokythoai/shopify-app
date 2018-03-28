@@ -7,7 +7,7 @@ class CartController < ApplicationController
 
   def discount_cart
     shop_domain =request.env["HTTP_ORIGIN"].to_s.gsub("https://", "")
-    shop = Shop.where(shopify_domain: shop_domain).first
+    shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
     session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
     ShopifyAPI::Base.activate_session(session)
     original_cost = params["original_price"].gsub(".","").to_f/100
