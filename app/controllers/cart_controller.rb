@@ -2,16 +2,17 @@ require "uri"
 require "net/http"
 
 class CartController < ApplicationController
+
   protect_from_forgery with: :null_session
   skip_before_action :verify_authenticity_token
 
   def discount_cart
     shop_domain =request.env["HTTP_ORIGIN"].to_s.gsub("https://", "")
-    shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
+    shop = Shop.where(shopify_domain: shop_domain).first
     session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
     ShopifyAPI::Base.activate_session(session)
     original_cost = params["original_price"].gsub(".","").to_f/100
-    discount_cost = params["discount_price"].gsub(".","").to_f
+    discount_cost = params["discount_price"].gsub(".",",").gsub("$", "").gsub(",", "").to_f/100
     product_array = params["product_array"].map{|id| id.to_i }.reject{|num| num.zero?}
     title = "MISKRE_" + [*('a'..'z'),*('0'..'9')].shuffle[0,10].join
     discount_result =  false
@@ -33,6 +34,7 @@ class CartController < ApplicationController
           starts_at: Time.zone.now - 14.days,
           ends_at: Time.zone.now + 2.days
       )
+      binding.pry
       @new_price_rule.save
       @new_discount_code = ShopifyAPI::DiscountCode.new(
           'price_rule_id': @new_price_rule.id,
@@ -41,6 +43,7 @@ class CartController < ApplicationController
           'value_type': 'fixed_amount',
           'value': (0 - (original_cost - discount_cost)).to_s
       )
+
       @new_discount_code.save ? (discount_result = title) : false
 
     end
