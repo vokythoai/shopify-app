@@ -15,12 +15,18 @@ class BuildPromotionService
         )
         session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
         ShopifyAPI::Base.activate_session(session)
+        pages = (ShopifyAPI::Product.count.to_f / 50.to_f).ceil
+        @products = []     # Collect all products in array
+        (1..pages).each do |page|
+          @products += ShopifyAPI::Product.all(params: { page: page, limit: 50 })
+        end
+
         currency = ShopifyAPI::Shop.current.attributes["currency"]
         if promotion_param["product"].present? && promotion_param["all_product"] == "0"
           product_param = promotion_param["product"]
           product_param.each do |product|
             if product.present?
-              details = ShopifyAPI::Product.find(product.to_i).attributes
+              details = @products.select{|a| a.attributes["id"] == product.to_i }.first.attributes
               product = Product.find_or_initialize_by(product_shopify_id: details["id"].to_i, name: details["title"])
               product.shop_id = shop_id
               product.save
@@ -28,7 +34,7 @@ class BuildPromotionService
             end
           end
         elsif promotion_param["all_product"] == "1"
-          ShopifyAPI::Product.all.each do |product|
+          @products.each do |product|
             product = Product.find_or_initialize_by(product_shopify_id: product.attributes["id"], name: product.attributes["title"])
             product.shop_id = shop_id
             product.save
@@ -92,13 +98,18 @@ class BuildPromotionService
 
         session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
         ShopifyAPI::Base.activate_session(session)
+        ages = (ShopifyAPI::Product.count.to_f / 50.to_f).ceil
+        @products = []     # Collect all products in array
+        (1..pages).each do |page|
+          @products += ShopifyAPI::Product.all(params: { page: page, limit: 50 })
+        end
 
         if promotion_param["product"].present?
           product_ids = []
           product_param = promotion_param["product"]
           product_param.each do |product|
             if product.present?
-              details = ShopifyAPI::Product.find(product.to_i).attributes
+              details = @products.select{|a| a.attributes["id"] == product.to_i }.first.attributes
               product = Product.find_or_initialize_by(product_shopify_id: details["id"].to_i, name: details["title"])
               product.shop_id = shop_id
               product.save
