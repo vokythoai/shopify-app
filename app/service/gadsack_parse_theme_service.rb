@@ -136,11 +136,19 @@ class GadsackParseThemeService
 
       @spend_amount_html = @spend_amount_html.present? ? @spend_amount_html : '<span class="wh-cart-total" data-original={{ original_total }}>{{ total| money }}</span>'
 
-      else_spend_amount = "{% elsif true %}
+      if @spend_amount_html != '<span class="wh-cart-total" data-original={{ original_total }}>{{ total| money }}</span>'
+        @else_spend_amount = "{% elsif true %}
                           {% assign final_price = total  %}
                           <span class='wh-cart-total no-discount' data-original={{ original_total }}>{{ total | money }}</span>
                           {% endif %}"
-      total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ total | money }}</span>' + (@spend_amount_html + else_spend_amount) + '</span><div class="additional-notes">YOU SAVE {{ compare_price_total | minus: final_price | money}}</div></span>' + @alert_spend_amount_html
+      else
+        @else_spend_amount = "{% if true %}
+                          {% assign final_price = total  %}
+                          <span class='wh-cart-total no-discount' data-original={{ original_total }}>{{ total | money }}</span>
+                          {% endif %}"
+      end
+
+      total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ total | money }}</span>' + (@spend_amount_html + @else_spend_amount) + '</span><div class="additional-notes">YOU SAVE {{ compare_price_total | minus: final_price | money}}</div></span>' + @alert_spend_amount_html
       if @promotion_html
         html_content.prepend("{% include 'vncpc' %}")
         html_content.prepend("{% assign total = 0 %}")
