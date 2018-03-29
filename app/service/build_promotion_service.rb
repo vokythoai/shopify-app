@@ -98,7 +98,7 @@ class BuildPromotionService
 
         session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
         ShopifyAPI::Base.activate_session(session)
-        ages = (ShopifyAPI::Product.count.to_f / 50.to_f).ceil
+        pages = (ShopifyAPI::Product.count.to_f / 50.to_f).ceil
         @products = []     # Collect all products in array
         (1..pages).each do |page|
           @products += ShopifyAPI::Product.all(params: { page: page, limit: 50 })
