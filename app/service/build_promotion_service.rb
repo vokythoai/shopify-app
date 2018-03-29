@@ -127,7 +127,7 @@ class BuildPromotionService
           end
           promotion.product_ids = product_ids.uniq
         end
-        
+
         if promotion.valid?
           promotion.promotion_name = @promotion_name.join(" ")
           promotion.save
