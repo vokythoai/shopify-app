@@ -1,7 +1,7 @@
 #module-new-promotion
   .panel.panel-default
     .panel-body
-      = render 'form', promotion: @promotion
+      = render 'form', promotion: @promotion, products: @products
 :javascript
   $( document ).ready(function() {
      $('#promotion_valid_date').datepicker({
