@@ -152,6 +152,7 @@ class GadsackParseThemeService
         html_content.prepend("{% assign final_price = 0 %}")
         # html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
         html_content.gsub!("{{ item.line_price | money }}", @promotion_html)
+        binding.pry
         html_content.gsub!('<p class="cart__subtotal"><span id="bk-cart-subtotal-price">{{ cart.total_price | money }}</span></p>', total_qty)
       end
 
