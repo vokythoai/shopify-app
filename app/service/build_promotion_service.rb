@@ -123,7 +123,7 @@ class BuildPromotionService
             product = Product.find_or_initialize_by(product_shopify_id: product.attributes["id"], name: product.attributes["title"])
             product.shop_id = shop_id
             product.save
-            product_ids << product
+            product_ids << product.id
           end
           promotion.product_ids = product_ids.uniq
         end
