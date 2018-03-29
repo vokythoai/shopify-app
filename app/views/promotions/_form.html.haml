@@ -57,7 +57,7 @@
           -#= f.select("colection", options_for_select(ShopifyAPI::Product.all.collect{|a| [a.attributes["title"], a.attributes["id"]] }), prompt: 'Select collections')
           = f.check_box :all_product, { id: "all_products"}
           %label{:for => "all_products"} or apply these volume discounts across the entire
-        .btn.btn-default#remove_products  Remove all products
+          .btn.btn-default#remove_products  Remove all products
           -#%hr
         -#.qty-option-tab
         -#  %h5 Sum up Quantities:
