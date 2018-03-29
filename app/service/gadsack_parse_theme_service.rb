@@ -117,7 +117,6 @@ class GadsackParseThemeService
                                 <span class='discount-spend-amount'>Discount #{detail[1].to_i}% = {{ #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>
                                 <span class='wh-cart-total' data-original={{ original_total }}>{{ 100 | minus: #{detail[1].to_i} | times: total | divided_by: 100 | money }}</span>"
         end
-
         alert_spend_qty.each_with_index do |detail, index_|
           @alert_spend_amount_html += ((index.zero? && index_.zero?) ? "{% if total < #{detail[0].to_i*100} %}" : "{% elsif total < #{detail[0].to_i*100} %}")
           @alert_spend_amount_html += '<script type="text/javascript">' +
@@ -142,7 +141,6 @@ class GadsackParseThemeService
                           <span class='wh-cart-total no-discount' data-original={{ original_total }}>{{ total | money }}</span>
                           {% endif %}"
       total_qty = '<span class="cart__subtotal"><span class="wh-original-cart-total">{{ total | money }}</span>' + (@spend_amount_html + else_spend_amount) + '</span><div class="additional-notes">YOU SAVE {{ compare_price_total | minus: final_price | money}}</div></span>' + @alert_spend_amount_html
-
       if @promotion_html
         html_content.prepend("{% include 'vncpc' %}")
         html_content.prepend("{% assign total = 0 %}")
@@ -152,10 +150,6 @@ class GadsackParseThemeService
         html_content.prepend("{% assign final_price = 0 %}")
         # html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
         html_content.gsub!("{{ item.line_price | money }}", @promotion_html)
-        p "==============================="
-        p total_qty
-        p "====================================="
-        p html_content =~ /<p class="cart__subtotal"><span id="bk-cart-subtotal-price">{{ cart.total_price | money }}<\/span><\/p>/
         html_content.gsub!('<p class="cart__subtotal"><span id="bk-cart-subtotal-price">{{ cart.total_price | money }}</span></p>', total_qty)
       end
 
@@ -174,7 +168,6 @@ class GadsackParseThemeService
           html_content.insert(insert_point_3, @alert_discount_html)
         end
       end
-      p html_content
       return html_content
     end
 
@@ -197,4 +190,5 @@ class GadsackParseThemeService
     end
   end
 end
+
 

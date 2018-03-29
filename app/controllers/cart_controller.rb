@@ -34,7 +34,6 @@ class CartController < ApplicationController
           starts_at: Time.zone.now - 14.days,
           ends_at: Time.zone.now + 2.days
       )
-      binding.pry
       @new_price_rule.save
       @new_discount_code = ShopifyAPI::DiscountCode.new(
           'price_rule_id': @new_price_rule.id,
