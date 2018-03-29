@@ -6,6 +6,11 @@ class PromotionsController < ShopifyApp::AuthenticatedController
 
   def new
     @promotion = Promotion.new
+    pages = (ShopifyAPI::Product.count.to_f / 50.to_f).ceil
+    @products = []     # Collect all products in array
+    (1..pages).each do |page|
+      @products += ShopifyAPI::Product.all(params: { page: page, limit: 50 })
+    end
   end
 
   def create
