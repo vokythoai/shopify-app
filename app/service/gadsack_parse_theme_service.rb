@@ -174,7 +174,7 @@ class GadsackParseThemeService
           html_content.insert(insert_point_3, @alert_discount_html)
         end
       end
-
+      puts html_content
       return html_content
     end
 
