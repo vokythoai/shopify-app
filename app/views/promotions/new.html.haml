@@ -111,7 +111,7 @@
   });
 
   $("#remove_products").on("click", function() {
-    $('#promotion_product_chosen option:selected').removeAttr('selected');
-    $('#promotion_product_chosen').trigger('chosen:updated');
+    $('#promotion_product option:selected').removeAttr('selected');
+    $('#promotion_product').trigger('chosen:updated');
   });
 
