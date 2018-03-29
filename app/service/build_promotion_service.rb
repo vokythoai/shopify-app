@@ -104,7 +104,7 @@ class BuildPromotionService
           @products += ShopifyAPI::Product.all(params: { page: page, limit: 50 })
         end
 
-        if promotion_param["product"].present?
+        if promotion_param["product"].present? && promotion_param["all_product"] == "0"
           product_ids = []
           product_param = promotion_param["product"]
           product_param.each do |product|
@@ -117,7 +117,17 @@ class BuildPromotionService
             end
           end
           promotion.product_ids = product_ids.uniq
+        elsif promotion_param["all_product"] == "1"
+          product_ids = []
+          @products.each do |product|
+            product = Product.find_or_initialize_by(product_shopify_id: product.attributes["id"], name: product.attributes["title"])
+            product.shop_id = shop_id
+            product.save
+            product_ids << product
+          end
+          promotion.product_ids = product_ids.uniq
         end
+        
         if promotion.valid?
           promotion.promotion_name = @promotion_name.join(" ")
           promotion.save
