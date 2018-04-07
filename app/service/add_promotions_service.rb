@@ -47,14 +47,14 @@ class AddPromotionsService
       session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
       ShopifyAPI::Base.activate_session(session)
 
-      # product_template = ShopifyAPI::Asset.find('templates/product-template.liquid')
-      # product_template.value.gsub!("{% section 'product-template' %}", "{% section 'product-template-miskre-discount' %}")
-      # product_template.save
-      #
-      # section = ShopifyAPI::Asset.find('sections/product-template.liquid')
-      # new_section = ShopifyAPI::Asset.new({key: 'sections/product-template-miskre-discount.liquid'})
-      # new_section.value = ThoaivkParseThemeService.add_section(section.value, shop.promotions, shop)
-      # new_section.save
+      product_template = ShopifyAPI::Asset.find('templates/product.liquid')
+      product_template.value.gsub!("{% section 'product-template' %}", "{% section 'product-template-miskre-discount' %}")
+      product_template.save
+
+      section = ShopifyAPI::Asset.find('sections/product-template.liquid')
+      new_section = ShopifyAPI::Asset.new({key: 'sections/product-template-miskre-discount.liquid'})
+      new_section.value = ThoaivkParseThemeService.add_section(section.value, shop.promotions, shop)
+      new_section.save
 
       cart = ShopifyAPI::Asset.find('templates/cart.liquid')
       new_cart = ShopifyAPI::Asset.new({key: 'sections/cart-template-miskre-discount.liquid'})
