@@ -156,7 +156,7 @@ class ThoaivkParseThemeService
 
 
 
-      @alert_spend_amount_html = @alert_spend_amount_html.present? ? (@alert_spend_amount_html + "{% endif %}") : ""
+      @alert_spend_amount_html = @alert_spend_amount_html.present? ? (@alert_spend_amount_html +  @success_spend_amount_html + "{% endif %}") : ""
 
       @spend_amount_html = @spend_amount_html.present? ? @spend_amount_html : '<span class="wh-cart-total" data-original={{ original_total }}>{{ total| money }}</span>'
 
