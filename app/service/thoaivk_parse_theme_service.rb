@@ -71,9 +71,9 @@ class ThoaivkParseThemeService
                       </span>
                       <span class='discounted_price'>"
           qty.each_with_index do |detail_, index__|
-            @content += "{% if myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail_[0].to_i} %}"
-            @content += "<span> #{detail_[0].to_i} or More Discount #{detail_[1].to_i}% </span>"
-            @content += "<span> {{ #{detail_[1].to_i} | times: item.line_price | divided_by: 100 | money }} </span>"
+            @content += ((index__.zero?) ? "{% if myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}" : "{% elsif myProductId_#{promotion.id} contains item.product_id and item.quantity >= #{detail[0].to_i} %}")
+            @content += "<span class='discount-info'> #{detail_[0].to_i} or More Discount #{detail_[1].to_i}% </span>"
+            @content += "<span class='discount-cost'> -{{ #{detail_[1].to_i} | times: item.line_price | divided_by: 100 | money }} </span>"
             @content += "{% else %}"
             @content += "<span> #{detail_[0].to_i} or More Discount #{detail_[1].to_i}% </span>"
             @content += "{% endif %}"
@@ -179,7 +179,8 @@ class ThoaivkParseThemeService
         html_content.prepend("{% assign final_price = 0 %}")
         # html_content.gsub!("<span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>", @promotion_html)
         html_content.gsub!("{{ item.line_price | money }}", @promotion_html)
-        html_content.gsub!('<p class="cart__subtotal"><span id="bk-cart-subtotal-price">{{ cart.total_price | money }}</span></p>', total_qty)
+        # html_content.gsub!('<p class="cart__subtotal"><span id="bk-cart-subtotal-price">{{ cart.total_price | money }}</span></p>', total_qty) for gadshack
+        html_content.gsub!('<p class="cart__subtotal"><span id="bk-cart-subtotal-price"><span class="wh-original-cart-total">{{ cart.total_price | money }}</span><span class="wh-cart-total"></span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note"></span></div></span></p>', total_qty)
       end
 
       unless (html_content =~ /<input id="discount_input" type="hidden" name="discount" value="">/).present?
