@@ -75,7 +75,7 @@ class ThoaivkParseThemeService
             @content += "<span class='discount-info'> #{detail_[0].to_i} or More Discount #{detail_[1].to_i}% </span>"
             @content += "<span class='discount-cost'> -{{ #{detail_[1].to_i} | times: item.line_price | divided_by: 100 | money }} </span>"
             @content += "{% else %}"
-            @content += "<span> #{detail_[0].to_i} or More Discount #{detail_[1].to_i}% </span>"
+            @content += "<span class='discount-info'> #{detail_[0].to_i} or More Discount #{detail_[1].to_i}% </span>"
             @content += "{% endif %}"
           end
 
