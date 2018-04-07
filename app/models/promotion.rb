@@ -33,8 +33,10 @@ class Promotion < ActiveRecord::Base
   after_create do
     shop = ShopifyAPI::Shop.current
     current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
-    if shop.attributes["myshopify_domain"] == "gadshack.myshopify.com" || shop.attributes["myshopify_domain"] == "thoaivk.myshopify.com"
+    if shop.attributes["myshopify_domain"] == "gadshack.myshopify.com"
       AddPromotionsService.add_promotion_for_gadsack(current_shop)
+    elsif shop.attributes["myshopify_domain"] == "thoaivk.myshopify.com"
+      AddPromotionsService.add_promotion_for_thoaivk(current_shop)
     else
       AddPromotionsService.add_promotion(current_shop)
     end
@@ -43,8 +45,10 @@ class Promotion < ActiveRecord::Base
   after_update do
     shop = ShopifyAPI::Shop.current
     current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
-    if shop.attributes["myshopify_domain"] == "gadshack.myshopify.com" || shop.attributes["myshopify_domain"] == "thoaivk.myshopify.com"
+    if shop.attributes["myshopify_domain"] == "gadshack.myshopify.com"
       AddPromotionsService.add_promotion_for_gadsack(current_shop)
+    elsif shop.attributes["myshopify_domain"] == "thoaivk.myshopify.com"
+      AddPromotionsService.add_promotion_for_thoaivk(current_shop)
     else
       AddPromotionsService.add_promotion(current_shop)
     end
@@ -53,8 +57,10 @@ class Promotion < ActiveRecord::Base
   after_destroy do
     shop = ShopifyAPI::Shop.current
     current_shop = Shop.where(shopify_domain: shop.attributes["domain"]).first || Shop.where(shopify_domain: shop.attributes["myshopify_domain"]).first
-    if shop.attributes["myshopify_domain"] == "gadshack.myshopify.com" || shop.attributes["myshopify_domain"] == "thoaivk.myshopify.com"
+    if shop.attributes["myshopify_domain"] == "gadshack.myshopify.com"
       AddPromotionsService.add_promotion_for_gadsack(current_shop)
+    elsif shop.attributes["myshopify_domain"] == "thoaivk.myshopify.com"
+      AddPromotionsService.add_promotion_for_thoaivk(current_shop)
     else
       AddPromotionsService.add_promotion(current_shop)
     end
