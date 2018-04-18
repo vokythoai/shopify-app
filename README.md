@@ -1,24 +1,24 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A shopify app for creating discount for orders
 
-Things you may want to cover:
+Implement discount UI to shopify online store and calculating price of orders
 
-* Ruby version
+Technical:
 
-* System dependencies
+- Ruby on rails
 
-* Configuration
+- Liquid ( Shopify theme language)
 
-* Database creation
+- Postgresql
 
-* Database initialization
+Install:
 
-* How to run the test suite
+- Git clone
 
-* Services (job queues, cache servers, search engines, etc.)
+- Bundle install
 
-* Deployment instructions
+- Specify API key for app in Shopify partner
 
-* ...
+- Rails s
+
